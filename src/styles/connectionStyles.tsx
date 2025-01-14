@@ -17,10 +17,11 @@ export const connectionStyles = StyleSheet.create({
     sendReceiveButton: {
         paddingHorizontal: 10,
         borderRadius: 2,
-        paddingVertical: 5,
+        paddingVertical: 10,
         gap: 4,
         flexDirection: 'row',
         alignItems: "center",
+        justifyContent: "space-between",
     },
     disconnectButton: {
         paddingHorizontal: 10,

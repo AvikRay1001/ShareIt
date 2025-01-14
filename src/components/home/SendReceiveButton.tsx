@@ -1,14 +1,15 @@
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
 import { screenHeight } from '../../utils/Constants'
+import { navigate } from '../../utils/NavigationUtil'
 const SendReceiveButton = () => {
   return (
     <View style={styles.container}>
 
-        <TouchableOpacity style={styles.button} onPress={() => { }}>
+        <TouchableOpacity style={styles.button} onPress={() => navigate('SendScreen')}>
             <Image source={require('../../assets/icons/send1.jpg')} style={styles.img}/>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.button} onPress={() => { }}>
+        <TouchableOpacity style={styles.button} onPress={() => navigate('ReceiveScreen')}>
             <Image source={require('../../assets/icons/receive1.jpg')} style={styles.img}/>
         </TouchableOpacity>
 

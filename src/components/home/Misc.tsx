@@ -14,7 +14,7 @@ const Misc = () => {
         </View>
 
         <CustomText fontFamily='Okra-Bold' style={styles.text2}>
-            Developed by - KilleRay1010     
+            Developed by - AvikRay 
         </CustomText>
     </View>
   )

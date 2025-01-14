@@ -7,6 +7,8 @@ import CustomText from '../global/CustomText';
 import {Camera, CodeScanner, useCameraDevice} from 'react-native-vision-camera'
 import  Animated, {Easing, useSharedValue, useAnimatedStyle, withRepeat, withTiming} from 'react-native-reanimated';
 import LinearGradient from 'react-native-linear-gradient';
+import { useTCP } from '../../service/TCPProvider';
+import { navigate } from '../../utils/NavigationUtil';
 
 
 
@@ -17,7 +19,7 @@ interface ModalProps {
 
 
 const QRScannerModal: FC<ModalProps> = ({visible, onClose}) => {
-
+    const { connectedToServer, isConnected } = useTCP()
     const [loading, setloading] = useState(true)
     const [codeFound, setcodeFound] = useState(false)
     const [hasPermission, sethasPermission] = useState(false)
@@ -55,6 +57,8 @@ const QRScannerModal: FC<ModalProps> = ({visible, onClose}) => {
     const handleScan = (data:any) => {
       const [connectionData, deviceName] = data.replace('tcp://','').split('|');
       const [host,port] = connectionData?.split(":");
+      //connect to server
+      connectedToServer(host, parseInt(port, 10), deviceName)
     }
 
     
@@ -73,6 +77,15 @@ const QRScannerModal: FC<ModalProps> = ({visible, onClose}) => {
         }
       }
     }),[codeFound])
+
+    useEffect(() => {
+      if(isConnected){
+        onClose()
+        navigate("ConnectionScreen")
+      }
+    
+    }, [isConnected])
+    
 
   return (
     <Modal

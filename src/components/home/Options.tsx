@@ -3,14 +3,38 @@ import { optionStyles } from '../../styles/optionsStyles';
 import Icon from '../global/Icon';
 import { Colors } from '../../utils/Constants';
 import CustomText from '../global/CustomText';
+import { useTCP } from '../../service/TCPProvider';
+import { FC } from 'react';
+import { navigate } from '../../utils/NavigationUtil';
+import { pickDocument, pickImage } from '../../utils/libraryHelpers';
+
+
 const Options:FC<{
     isHome?: boolean;
     onMediaPickedUp?: (media:any) => void;
     onFilePickedUp?: (file:any) => void;
 }> = ({isHome, onFilePickedUp, onMediaPickedUp}) => {
 
-    const handleUniversalPicker = async(type: string)=>{
+      const {isConnected} = useTCP()
 
+    const handleUniversalPicker = async(type: string)=>{
+      if(isHome){
+            if(isConnected){
+                  navigate("ConnnectionScreen")
+            }else{
+                  navigate("SendScreen")
+            }
+            return
+      }
+
+      if(type==='images' && onMediaPickedUp){
+            pickImage(onMediaPickedUp)
+      }
+
+      if(type==='file' && onFilePickedUp){
+            pickDocument(onFilePickedUp)
+      }
+      
     }
 
   return (
@@ -19,11 +43,11 @@ const Options:FC<{
             <Icon name='images' iconFamily='Ionicons' color={Colors.primary} size={20}/>
             <CustomText fontFamily='Okra-Medium' style={{marginTop: 4, textAlign: 'center'}}>Photo</CustomText>
       </TouchableOpacity>
-      <TouchableOpacity style={optionStyles.subContainer} onPress={() => handleUniversalPicker('files')}>
+      <TouchableOpacity style={optionStyles.subContainer} onPress={() => handleUniversalPicker('file')}>
             <Icon name='musical-notes-sharp' iconFamily='Ionicons' color={Colors.primary} size={20}/>
             <CustomText fontFamily='Okra-Medium' style={{marginTop: 4, textAlign: 'center'}}>Audio</CustomText>
       </TouchableOpacity>
-      <TouchableOpacity style={optionStyles.subContainer} onPress={() => handleUniversalPicker('files')}>
+      <TouchableOpacity style={optionStyles.subContainer} onPress={() => handleUniversalPicker('file')}>
             <Icon name='folder-open' iconFamily='Ionicons' color={Colors.primary} size={20}/>
             <CustomText fontFamily='Okra-Medium' style={{marginTop: 4, textAlign: 'center'}}>Files</CustomText>
       </TouchableOpacity>

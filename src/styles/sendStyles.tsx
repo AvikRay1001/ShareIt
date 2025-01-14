@@ -4,10 +4,11 @@ import { screenWidth } from "../utils/Constants";
 export const sendStyles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#85CAFB",
+        // backgroundColor: "#85CAFB",
     },
     mainContainer: {
         flex: 1,
+        padding:20
     },
     deviceDot: {
         position: 'absolute',

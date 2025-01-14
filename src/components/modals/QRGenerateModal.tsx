@@ -10,6 +10,9 @@ import LinearGradient from 'react-native-linear-gradient';
 import QRCode from 'react-native-qrcode-svg';
 import { multiColor } from '../../utils/Constants';
 import DeviceInfo from 'react-native-device-info';
+import { useTCP } from '../../service/TCPProvider';
+import { navigate } from '../../utils/NavigationUtil';
+import { getLocalIPAddress } from '../../utils/networkUtils';
 
 
 interface ModalProps {
@@ -19,7 +22,7 @@ interface ModalProps {
 
 
 const QRGenerateModal: FC<ModalProps> = ({visible, onClose}) => {
-
+    const { isConnected, server, startServer } = useTCP()
     const [loading, setloading] = useState(true)
     const [qrValue, setqrValue] = useState('Avik')
     const shimmerTranslateX = useSharedValue(-300);
@@ -30,7 +33,18 @@ const QRGenerateModal: FC<ModalProps> = ({visible, onClose}) => {
 
     const setupServer = async () => {
         const deviceName = await DeviceInfo.getDeviceName();
+        const ip = await getLocalIPAddress()
+        const port = 4000;
 
+        if(server) {
+          setqrValue(`tcp://${ip}:${port}|${deviceName}`)
+          setloading(false)
+          return;
+        }
+
+        startServer(port)
+        setqrValue(`tcp://${ip}:${port}|${deviceName}`)
+        console.log(`Server info: ${ip}:${port}`)
 
         setloading(false);
     }
@@ -52,6 +66,15 @@ const QRGenerateModal: FC<ModalProps> = ({visible, onClose}) => {
     }, [visible])
 
    
+    useEffect(() => {
+      console.log("TCPProvider: isConnected updated to", isConnected);
+      if(isConnected) {
+        onClose()
+        navigate('ConnectionScreen');
+      }
+    
+    }, [isConnected])
+    
 
    
   return (
